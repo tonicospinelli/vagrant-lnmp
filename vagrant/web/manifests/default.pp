@@ -36,7 +36,7 @@ package { [
     'git-core',
     'mc'
   ]:
-    ensure => 'installed',
+  ensure => 'installed',
 }
 
 
@@ -73,20 +73,39 @@ class { 'php':
   service => 'nginx',
 }
 
-php::module { 'php5-mysql': }
-php::module { 'php5-sqlite': }
-php::module { 'php5-cli': }
-php::module { 'php5-curl': }
-php::module { 'php5-intl': }
-php::module { 'php5-mcrypt': }
-php::module { 'php5-gd': }
-php::module { 'php5-imap': }
-php::module { 'php5-xdebug': }
-php::module { 'php-apc': }
-php::module { 'php5-fpm': }
+php::module {[
+  'cli',
+  'curl',
+  'fpm',
+  'gd',
+  'imap',
+  'intl',
+  'mcrypt',
+  'mysql',
+  'sqlite',
+  'xdebug'
+]:}
+php::module { 'apc': module_prefix => "php-"}
 
 class { 'php::devel':
    require => Class['php'],
+}
+
+file{ "/etc/php5/fpm/pool.d/www.conf":
+  ensure => present,
+  require => Php::Module['fpm'],
+}
+
+exec { 'php5_fpm_permission':
+  command => 'sed -i "s/\;listen\.\(owner\|group\|mode\)/listen\.\1/g" /etc/php5/fpm/pool.d/www.conf',
+  require => File["/etc/php5/fpm/pool.d/www.conf"],
+  notify => Service['php5-fpm'],
+}
+
+service { 'php5-fpm':
+  ensure  => "running",
+  enable  => "true",
+  require => Php::Module['fpm'],
 }
 
 class { 'composer':
