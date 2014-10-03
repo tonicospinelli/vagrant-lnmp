@@ -15,7 +15,7 @@ try{
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Vagrant LAMP stack</title>
+	<title>Vagrant LNMP stack</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
